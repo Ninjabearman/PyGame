@@ -14,16 +14,23 @@ screen = pygame.display.set_mode((screenWidth,screenHeight))
 bg = (255,200,150)
 bodyInner = (50,175,25)
 bodyOuter = (100,100,200)
+cellSize = 10
+isHead = (255,0,0)
 
 #game variables
-cellSize = 10
 snakePosition = [[int(screenWidth / 2),int(screenHeight / 2)]]
-snakePosition.append([int(screenWidth / 2),int(screenHeight / 2) * cellSize])
-snakePosition.append([int(screenWidth / 2),int(screenHeight / 2) * cellSize * 2])
-snakePosition.append([int(screenWidth / 2),int(screenHeight / 2) * cellSize * 3])
+snakePosition.append([int(screenWidth / 2),int(screenHeight / 2) + cellSize])
+snakePosition.append([int(screenWidth / 2),int(screenHeight / 2) + cellSize * 2])
+snakePosition.append([int(screenWidth / 2),int(screenHeight / 2) + cellSize * 3])
 
 def drawScreen():
     screen.fill(bg)
+
+def drawSnake(bodyOuter,bodyInner,head):
+    pygame.draw.rect(screen,bodyOuter,(x[0],x[1],cellSize,cellSize),cellSize)
+    pygame.draw.rect(screen,bodyInner,(x[0] + 1,x[1] + 1,cellSize - 2,cellSize -2 ))
+    if head == 1:
+        head == 0
 
 #game loop
 while isRunning:
@@ -33,9 +40,15 @@ while isRunning:
         if event.type == pygame.QUIT:
             isRunning = False
 
+    head = 1
     for x in snakePosition:
-        pygame.draw.rect(screen,bodyOuter,(x[0],x[1],cellSize,cellSize))
-        pygame.draw.rect(screen,bodyInner,(x[0] + 1,x[1] + 1,cellSize -2,cellSize - 2))
+        if head == 0:
+            pygame.draw.rect(screen,bodyOuter,(x[0],x[1],cellSize,cellSize),cellSize)
+            pygame.draw.rect(screen,bodyInner,(x[0] + 1,x[1] + 1,cellSize - 2,cellSize -2 ))
+        if head == 1:
+            pygame.draw.rect(screen,bodyOuter,(x[0],x[1],cellSize,cellSize),cellSize)
+            pygame.draw.rect(screen,isHead,(x[0] + 1,x[1] + 1,cellSize - 2,cellSize -2 ))
+            head = 0
 
     pygame.display.update()
 pygame.quit()
